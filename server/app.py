@@ -24,7 +24,7 @@ api = Api(app)
 def index():
     return "<h1>Code challenge</h1>"
 
-@app.route('/restaurants', methods=['GET','POST'])
+@app.route('/restaurants', methods=['GET'])
 def restaurants():
     if request.method == 'GET':
         restaurants=[]
@@ -37,20 +37,6 @@ def restaurants():
             restaurants.append(restaurant_dict)
         response = make_response(
             jsonify(restaurants),200
-        )
-        return response
-    
-    elif request.method == 'POST':
-        new_restaurant = Restaurant(
-            name =request.form.get("name"),
-            address =request.form.get("address")
-        )
-        db.session.add(new_restaurant)
-        db.session.commit()
-        restaurant_dict = new_restaurant.to_dict()
-        response = make_response(
-            jsonify(restaurant_dict), 
-            201
         )
         return response
        
@@ -95,6 +81,7 @@ def get_restaurant_by_id(id):
                 jsonify({"error": "Restaurant not found"}), 404
             )
             return response
+        
 @app.route('/pizzas', methods=['GET'])
 def pizzas():
     if request.method == "GET":
